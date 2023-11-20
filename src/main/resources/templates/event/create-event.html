@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/default_layout">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fixed-center {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            width: 400px; /* Fixed width */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form > label,
+        form > input,
+        form > button {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+            font-size: 16px; /* Fixed font size */
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff; /* 파란색 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* 버튼에 마우스를 올렸을 때 색상 변화 효과 */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* 마우스 호버 시 색상 변경 */
+        }
+
+        a {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+    <body>
+    <div class="container">
+        <div class="fixed-center p-3">
+            <h1>이벤트 생성</h1>
+            <form th:action="@{/event/save}" method="post">
+                <label for="eventName">이벤트 이름</label>
+                <input type="text" id="eventName" name="eventName" placeholder="이벤트 이름을 입력하세요." required>
+
+                <label for="activationDate">시작 날짜</label>
+                <input type="date" id="activationDate" name="activationDate" required pattern="\d{4}-\d{2}-\d{2}">
+
+                <label for="deActivationDate">종료 날짜</label>
+                <input type="date" id="deActivationDate" name="deActivationDate" required pattern="\d{4}-\d{2}-\d{2}">
+
+                <button type="submit">생성</button>
+            </form>
+            <span>
+                    <a href="/" class="btn btn-dark dark" role="button">Home</a>
+                </span>
+        </div>
+    </div>
+    </body>
+</th:block>
+</html>

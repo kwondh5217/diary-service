@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/default_layout">
+<th:block layout:fragment="content">
+    <body class="bg-light">
+    <div class="container h-100" style="padding-top: 200px;">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-6 text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">회원 정보</h4>
+                        <p class="card-text"><strong>이름:</strong> <span th:text="${user.getName()}" class="font-weight-bold"></span></p>
+                        <p class="card-text"><strong>이메일:</strong> <span th:text="${user.getEmail()}" class="font-weight-bold"></span></p>
+                        <div class="mt-4 d-flex justify-content-center">
+                            <a href="/" class="btn btn-dark">홈</a>
+                            <form th:action="@{'/my-page/' + ${user.getId()} + '/delete'}" method="post" onsubmit="return confirm('정말로 탈퇴하시겠습니까?');">
+                                <button type="submit" class="btn btn-danger" style="margin-left: 10px;">회원 탈퇴</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</th:block>
+</html>

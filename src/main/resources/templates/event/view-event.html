@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/default_layout">
+<head>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 초기에 숨김 처리 */
+    #postForm {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    #friendForm {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    #postForm.active {
+      display: block;
+        opacity: 1;
+      }
+    #friendForm.active {
+      display: block;
+      opacity: 1;
+    }
+
+      .fixed-center {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 20px;
+        width: 400px;
+        margin: auto;
+        text-align: center;
+      }
+
+      .form-group {
+        text-align: left;
+      }
+
+      button[type="submit"] {
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+      }
+
+
+      #showFormButton {
+        margin-bottom: 20px;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      a.btn.btn-dark.dark {
+        display: block;
+      }
+
+      .form-group {
+        text-align: center;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        max-width: 300px;
+        margin: auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <th:block layout:fragment="content">
+    <body>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+      <span th:text="${errorMessage}"></span>
+    </div>
+    <div class="container mt-5">
+      <div class="fixed-center p-3">
+        <h1>이벤트 정보</h1>
+        <!-- 이벤트 정보 표시 -->
+        <h2>이름: <span th:text="${event.eventName}"></span></h2>
+        <p>상태: <span th:text="${event.status}"></span></p>
+        <p>생성자: <span th:text="${user.getName()}"></span></p>
+        <table class="table">
+          <tr th:each="post : ${event.getPosts()}">
+            <td>
+              <!-- 각 이벤트를 클릭하면 해당 이벤트의 eventId로 이동 -->
+              <p>제목 : <a th:href="@{'/event/' + ${event.id} + '/post/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></p>
+            </td>
+          </tr>
+        </table>
+
+        <!-- "Show Form" 버튼 -->
+        <button id="showFormButton" class="btn btn-primary" role="button" th:if="${event.status == T(com.diaryservice.webservice.domain.event.Status).ACTIVE}" onclick="toggleForm()">게시글 작성</button>
+
+
+        <!-- 친구 추가 폼 -->
+        <form id="friendForm" th:action="@{'/event/' + ${event.id} + '/invite-user'}" method="post">
+          <div class="form-group">
+            <label for="email">초대할 사용자 이메일</label>
+            <input type="text" class="form-control" id="email" name="email">
+          </div>
+
+          <button type="submit" class="btn btn-primary">추가</button>
+        </form>
+
+
+        <!-- 폼 작성 -->
+        <form id="postForm" th:action="@{'/event/' + ${event.id} + '/post'}" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="title">제목:</label>
+            <input type="text" class="form-control" id="title" name="title">
+          </div>
+
+          <div class="form-group">
+            <label for="author">작성자:</label>
+            <input type="text" class="form-control" id="author" name="author">
+          </div>
+
+          <div class="form-group">
+            <label for="content">내용:</label>
+            <textarea class="form-control" id="content" name="content"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="media">파일:</label>
+            <input type="file" class="form-control-file" id="media" name="media" accept=".jpg, .jpeg, .png, .gif">
+          </div>
+
+          <button type="submit" class="btn btn-primary">작성</button>
+        </form>
+
+
+        <div class="mt-4 d-flex justify-content-center">
+          <a href="/" class="btn btn-dark dark" role="button">홈</a>
+          <button id="showFriendFormButton" class="btn btn-primary" style="margin-left: 10px;" th:if="${event.userId == user.id}" onclick="toggleFriendForm()">친구 추가</button>
+          <form th:action="@{'/event/' + ${event.id} + '/delete'}" method="post">
+            <button type="submit" class="btn btn-danger" style="margin-left: 10px;" role="button">삭제</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      function toggleForm() {
+          var form = document.getElementById('postForm');
+          form.classList.toggle('active');
+      }
+
+      function toggleFriendForm(){
+          var friendForm = document.getElementById('friendForm');
+          friendForm.classList.toggle('active')
+      }
+      </script>
+
+      </body>
+    </th:block>
+    </html>
