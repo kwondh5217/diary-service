@@ -24,7 +24,6 @@ import java.util.Optional;
 
 
 @RequiredArgsConstructor
-@Log4j
 @Controller
 public class PostController {
 

@@ -10,7 +10,7 @@ import lombok.Setter;
 public class PostResponseDto {
 
     private Long id;
-    private Long EventId;
+    private Long eventId;
     private String title;
     private String content;
     private String author;
@@ -19,7 +19,7 @@ public class PostResponseDto {
     @Builder
     public PostResponseDto(Long id, Long eventId, String title, String content, String author, String mediaName) {
         this.id = id;
-        EventId = eventId;
+        this.eventId = eventId;
         this.title = title;
         this.content = content;
         this.author = author;

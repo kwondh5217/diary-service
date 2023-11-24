@@ -2,6 +2,7 @@ package com.diaryservice.webservice.domain.post;
 
 import com.diaryservice.webservice.domain.BaseTimeEntity;
 import com.diaryservice.webservice.domain.event.Event;
+import com.diaryservice.webservice.dto.PostResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,5 +37,16 @@ public class Post extends BaseTimeEntity {
         this.content = content;
         this.author = author;
         this.mediaName = mediaName;
+    }
+
+    public PostResponseDto toDto(){
+        return PostResponseDto.builder()
+                .id(id)
+                .eventId(event.getId())
+                .title(title)
+                .content(content)
+                .author(author)
+                .mediaName(mediaName)
+                .build();
     }
 }

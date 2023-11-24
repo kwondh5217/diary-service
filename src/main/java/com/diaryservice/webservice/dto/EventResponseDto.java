@@ -23,7 +23,6 @@ public class EventResponseDto {
 
 
     @Builder
-
     public EventResponseDto(Long id, Long userId, String eventName, Status status, LocalDate activationDate, LocalDate deactivationDate, List<PostResponseDto> posts) {
         this.id = id;
         this.userId = userId;

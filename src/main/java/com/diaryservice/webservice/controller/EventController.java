@@ -100,17 +100,9 @@ public class EventController {
     }
 
     private String getString(@PathVariable Long eventId, @LoginUser SessionUser sessionUser, Model model) {
-        Event eventById = eventService.findEventById(eventId);
 
-        EventResponseDto responseDto = EventResponseDto.builder()
-                .id(eventById.getId())
-                .userId(eventService.findUserIdById(eventId))
-                .eventName(eventById.getEventName())
-                .status(eventById.getStatus())
-                .activationDate(eventById.getActivationDate())
-                .deactivationDate(eventById.getDeactivationDate())
-                .posts(eventService.findAllPostsByEventId(eventId))
-                .build();
+        EventResponseDto responseDto = eventService.findEventById(eventId).toDto();
+
 
         model.addAttribute("event", responseDto);
         model.addAttribute("user", sessionUser);

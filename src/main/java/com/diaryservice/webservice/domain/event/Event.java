@@ -3,12 +3,15 @@ package com.diaryservice.webservice.domain.event;
 import com.diaryservice.webservice.domain.BaseTimeEntity;
 import com.diaryservice.webservice.domain.post.Post;
 import com.diaryservice.webservice.domain.user.User;
+import com.diaryservice.webservice.dto.EventResponseDto;
+import com.diaryservice.webservice.dto.PostResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
@@ -57,4 +60,23 @@ public class Event extends BaseTimeEntity {
         }
         invitedUsers.add(user);
     }
+
+    public EventResponseDto toDto(){
+
+        List<PostResponseDto> postResponseDtos = posts.stream()
+                .map(Post::toDto)
+                .collect(Collectors.toList());
+
+
+        return EventResponseDto.builder()
+                .id(id)
+                .userId(user.getId())
+                .status(status)
+                .eventName(eventName)
+                .activationDate(activationDate)
+                .deactivationDate(deactivationDate)
+                .posts(postResponseDtos)
+                .build();
+    }
+
 }
