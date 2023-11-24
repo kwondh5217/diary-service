@@ -11,6 +11,9 @@ import com.diaryservice.webservice.dto.EventResponseDto;
 import com.diaryservice.webservice.validate.ValidateUserAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,7 @@ public class EventController {
         session.setAttribute("errorMessage", "잘못된 접근입니다.");
         return "redirect:/"; // 인덱스 페이지로 리다이렉트
     }
+
 
     @GetMapping("/event/form")
     public String createFormEvent(@LoginUser SessionUser sessionUser){
@@ -78,24 +82,24 @@ public class EventController {
     }
 
     @ValidateUserAccess
+    @ResponseBody
     @PostMapping("event/{eventId}/invite-user")
-    public String inviteUser(@PathVariable Long eventId, @LoginUser SessionUser sessionUser,
-                             @RequestParam("email") String email, Model model) {
+    public ResponseEntity<String> inviteUser(@PathVariable Long eventId, @LoginUser SessionUser sessionUser,
+                                             @RequestParam("email") String email) {
 
         try {
             User invitedUser = userService.findByEmail(email);
             Event event = eventService.findEventById(eventId);
 
-            event.addInvitedUser(invitedUser);
-
-            return "redirect:/event/" + eventId; // 올바른 리다이렉트 경로
-
-        } catch (IllegalArgumentException e) {
-            if ("유효하지 않은 이메일입니다.".equals(e.getMessage())) {
-                model.addAttribute("errorMessage", "유효하지 않은 이메일입니다.");
+            if(eventService.inviteUser(event, invitedUser)){
+                return ResponseEntity.ok("성공적으로 추가되었습니다.");
             }
 
-            return getString(eventId, sessionUser, model);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 추가된 친구입니다.");
+
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효하지 않은 이메일입니다.");
         }
     }
 

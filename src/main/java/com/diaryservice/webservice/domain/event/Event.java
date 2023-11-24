@@ -40,7 +40,8 @@ public class Event extends BaseTimeEntity {
     @JoinTable(
             name = "event_invited_users",
             joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"event_id", "user_id"})}
     )
     private List<User> invitedUsers;
 
@@ -59,6 +60,10 @@ public class Event extends BaseTimeEntity {
             invitedUsers = new ArrayList<>();
         }
         invitedUsers.add(user);
+    }
+
+    public boolean isInvitedUser(User user){
+        return invitedUsers.stream().anyMatch(invited -> invited.getId().equals(user.getId()));
     }
 
     public EventResponseDto toDto(){
