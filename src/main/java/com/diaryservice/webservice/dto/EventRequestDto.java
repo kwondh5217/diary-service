@@ -4,11 +4,12 @@ import com.diaryservice.webservice.domain.event.Event;
 import com.diaryservice.webservice.domain.user.User;
 import com.diaryservice.webservice.domain.event.Status;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor
-@Getter
+@Getter @Setter
 public class EventRequestDto {
 
     private User user;
@@ -16,8 +17,10 @@ public class EventRequestDto {
     private Status status;
     private String eventName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate activationDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate deActivationDate;
 
     @Builder

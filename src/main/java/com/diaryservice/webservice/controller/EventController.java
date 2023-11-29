@@ -60,23 +60,13 @@ public class EventController {
     }
 
     @PostMapping("/event/save")
-    public String createEvent(@RequestParam("eventName") String eventName,
-                              @RequestParam("activationDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate activationDate,
-                              @RequestParam("deActivationDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate deActivationDate,
-                              @LoginUser SessionUser sessionUser,
-                              RedirectAttributes redirectAttributes) {
+    public String createEvent(@ModelAttribute EventRequestDto eventRequestDto, @LoginUser SessionUser sessionUser,
+                                RedirectAttributes redirectAttributes){
 
-        User user = userService.findById(sessionUser.getId());
-        EventRequestDto eventRequestDto = new EventRequestDto().builder()
-                .user(user)
-                .eventName(eventName)
-                .activationDate(activationDate)
-                .deActivationDate(deActivationDate)
-                .build();
+        eventRequestDto.setUser(userService.findById(sessionUser.getId()));
+        Long save = eventService.save(eventRequestDto.toEntity());
 
-        Long eventId = eventService.save(eventRequestDto.toEntity());
-
-        redirectAttributes.addAttribute("id", eventId);
+        redirectAttributes.addAttribute("id", save);
 
         return "redirect:/event/{id}";
     }
