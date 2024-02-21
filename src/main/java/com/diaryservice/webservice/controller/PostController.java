@@ -30,13 +30,6 @@ public class PostController {
     private final PostService postService;
     private final EventService eventService;
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleInvalidEventException(IllegalArgumentException e, HttpSession session) {
-        session.setAttribute("errorMessage", "잘못된 접근입니다.");
-        return "redirect:/"; // 인덱스 페이지로 리다이렉트
-    }
-
-
     @ValidateUserAccess
     @PostMapping("/event/{eventId}/post")
     public String savePost(@PathVariable Long eventId, @LoginUser SessionUser sessionUser,

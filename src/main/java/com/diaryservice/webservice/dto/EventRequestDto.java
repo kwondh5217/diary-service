@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @NoArgsConstructor
-@Getter @Setter
+@Getter
 public class EventRequestDto {
 
     private User user;

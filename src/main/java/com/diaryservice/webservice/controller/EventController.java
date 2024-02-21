@@ -31,13 +31,6 @@ public class EventController {
     private final EventService eventService;
     private final UserService userService;
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleInvalidEventException(IllegalArgumentException e, HttpSession session) {
-        session.setAttribute("errorMessage", "잘못된 접근입니다.");
-        return "redirect:/"; // 인덱스 페이지로 리다이렉트
-    }
-
-
     @GetMapping("/event/form")
     public String createFormEvent(@LoginUser SessionUser sessionUser){
 

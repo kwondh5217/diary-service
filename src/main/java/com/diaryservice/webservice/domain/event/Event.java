@@ -14,17 +14,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@Getter
 @Entity
 public class Event extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private Status status;
 
